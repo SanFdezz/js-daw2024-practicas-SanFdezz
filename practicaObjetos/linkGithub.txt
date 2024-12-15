@@ -1,0 +1,3 @@
+Este es el link a la práctica:
+
+https://github.com/SanFdezz/js-daw2024-practicas-SanFdezz/tree/b1b05f1bacb8608e13058a5098e0e9251ad1966b/practicaObjetos
