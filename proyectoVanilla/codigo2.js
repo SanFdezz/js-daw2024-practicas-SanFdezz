@@ -45,3 +45,7 @@ const min = fecha.getMinutes();
 textSaludo.textContent = 'Hola, '+userActual;
 // retocar el dia.
 textFecha.textContent = 'La última vez que entraste fue el '+dia+'-'+mes+'-'+anyo+' a las '+hora+':'+min;
+
+document.getElementById('btn').addEventListener('click',()=>{
+    window.location.href = "pantalla3.html";
+});

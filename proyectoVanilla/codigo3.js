@@ -27,24 +27,31 @@ const puntuacion = document.getElementById('puntos');
 const pregunta = document.getElementById('pregunta');
 const grabar = document.getElementById('grabar');
 const atras = document.getElementById('atras');
-const tabla = document.getElementById('tabla');
 const cargando = document.getElementById('cargando');
-// para obtener el nombre del usuario que inicio sesion.
-const user = sessionStorage.getItem('usuarioActual');
 const soloNum = /^[0-9]$/; // para que la puntuacion solo sea del 0 al 9
-let cookie = JSON.parse(getCookie(user));
+// para obtener el nombre del usuario que inicio sesion.
+const tabla = document.getElementById('tabla');
+const usuario = sessionStorage.getItem('usuarioActual');
+let cookie = JSON.parse(getCookie(usuario));
 let contador = 0;
 let buenaPunt = false;
 let buenaPreg = false;
 let checked = false;
-let respuesta;
+var respuesta;
+let token = false;
 
 // creo el temporizador para simular los 5 segundos de carga
-let timeout = setTimeout(()=>{
+if(token){
+    setTimeout(()=>{
+        cargando.hidden = true;
+        tabla.hidden = false;
+    },5000);
+} else {
     cargando.hidden = true;
-    tabla.hidden = false;
-},5000);
+    tabla.hidden = false; 
+}
 
+// para detectar si la pregunta esta aceptada
 
 pregunta.addEventListener('blur',()=>{
 if(pregunta.value != ''){
@@ -60,6 +67,8 @@ if(pregunta.value != ''){
     }
 
 });
+
+// para que solo se acepte una puntuacion adecuada
 
 puntuacion.addEventListener('blur', () => {
     if(soloNum.test(puntuacion.value)){
@@ -80,6 +89,8 @@ puntuacion.addEventListener('blur', () => {
 
 });  
 
+// checkFalso y checkVerdadero son para q no se puedan seleccionar ambos a la vez
+
 checkVerdadero.addEventListener('change',()=>{
     if(checkVerdadero.checked){
         checkFalso.checked = false;
@@ -95,6 +106,7 @@ checkVerdadero.addEventListener('change',()=>{
     }
 
 });
+
 
 checkFalso.addEventListener('change',()=>{
     if(checkFalso.checked){
@@ -112,10 +124,13 @@ checkFalso.addEventListener('change',()=>{
 
 });
 
+// volvemos atras si queremos
 atras.addEventListener('click',()=>{
     window.location.href = "pantalla2.html";
 });
 
+
+// funcion para detectar si era falso o verdadero
 function guardarPregunta(){
     pregunta.value;
     puntuacion.value;
@@ -126,16 +141,35 @@ function guardarPregunta(){
     }
 }
 
+//funciones asincronas
 
+// para crear el delay de guardado
+function delay(){
+    return new Promise((resolve)=>{
+        setTimeout(()=>{
+            resolve('Guardando...');
+        },5000);
+    });
+}
 
-
-
-
-
-
+// para poder guardar la info introducida en las cookies
+function guardar(){
+    return new Promise((resolve)=>{
+        guardarPregunta();
+        let info = [pregunta.value,respuesta,puntuacion.value];
+        console.log(info);
+        cookie.preguntas.push(info);
+        let nuevaCookie = JSON.stringify(cookie);
+        setCookie(usuario,nuevaCookie,7)
+        resolve('OK!');
+    });
+}
 
 
 // esto es lo último a realizar, que sera quien tenga los .then y .catch de la promesa
-grabar.addEventListener('click',()=>{
-
+grabar.addEventListener('click', () => {
+    delay()
+        .then(() => guardar()) // Llama a la función guardar después del delay
+        .then((mensaje) => console.log(mensaje)) // no falla
+        .catch((error) => console.log(error)); // si hay error
 });

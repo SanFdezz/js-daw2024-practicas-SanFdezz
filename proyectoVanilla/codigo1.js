@@ -78,7 +78,8 @@ registro.addEventListener('submit', function(event) {
         console.log('no existe la cookie');
         const infoJSON = {
             correo: correo.value,
-            ultimaConexion: Date.now()
+            ultimaConexion: Date.now(),
+            preguntas:[]
         }
         const userInfo = JSON.stringify(infoJSON);
         setCookie(correo.value,userInfo,7);

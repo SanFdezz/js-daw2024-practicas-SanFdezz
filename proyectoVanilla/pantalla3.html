@@ -4,8 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
+    <div class="contenedor">
+        <form>
+            <label>PREGUNTA: <input id="pregunta" type="text"></label>
+            <br>
+            <label>VERDADERO: <input id="verdadero" type="checkbox"></label>
+            <label>FALSO: <input id="falso" type="checkbox"></label>
+            <br>
+            <label>PUNTUACIÓN: <input id="puntos" type="text"></label>
+            <br>
+            
+        </form>
+        <button id="atras">ATRÁS</button>
+        <button id="grabar" disabled>GRABAR</button>
+        <div id="cargando">CARGANDO PREGUNTAS...</div>
+        <table id="tabla" hidden>
+            <thead>
+                <th>PREGUNTA</th>
+                <th>RESPUESTA</th>
+                <th>PUNTUACION</th>
+                <th>ESTADO</th>
+            </thead>
+        </table>
+    </div>
     <script src="codigo3.js"></script>
 </body>
 </html>
