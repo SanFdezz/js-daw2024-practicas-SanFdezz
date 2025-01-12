@@ -26,14 +26,12 @@ function deleteCookie(cname) {
     document.cookie = cname+'=; expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';
 }
 
+// creo las variables que voy a usar
 const textFecha = document.getElementById('ultimaEntrada');
 const textSaludo = document.getElementById('saludo');
-
 const userActual = sessionStorage.getItem('usuarioActual');
 const cookie = JSON.parse(getCookie(userActual));
 console.log(cookie);
-
-// ctel + d es para seleccionar todo lo q se llame igual
 const fecha = new Date();
 fecha.setTime(cookie.ultimaConexion);
 const dia = fecha.getDate();
@@ -42,10 +40,11 @@ const anyo = fecha.getFullYear();
 const hora = fecha.getHours();
 const min = fecha.getMinutes();
 
+// creo lo que va a decir la pagina
 textSaludo.textContent = 'Hola, '+userActual;
-// retocar el dia.
 textFecha.textContent = 'La última vez que entraste fue el '+dia+'-'+mes+'-'+anyo+' a las '+hora+':'+min;
 
+// y envio a la pagina 3 si se presiona el boton adecuado.
 document.getElementById('btn').addEventListener('click',()=>{
     window.location.href = "pantalla3.html";
 });

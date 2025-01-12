@@ -1,12 +1,13 @@
+// variables que voy a usar:
 const inicio = document.getElementById('inicio');
 const body = document.querySelector('body');
 const registro = document.getElementById('registro');
 const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const button = document.getElementById('btn');
 button.disabled = true;
-
 let firstTime = true;
 
+// para detectar si las teclas presionadas son las adecuadas
 body.addEventListener('keydown', (event) => {
     if(firstTime){
         if (event.ctrlKey && event.key == 'b') {
@@ -18,6 +19,7 @@ body.addEventListener('keydown', (event) => {
     }
 });
 
+// si no se pulsan las teclas, a los 5s se cargara la pagina igualmente
 const espera = setTimeout(() => {
     inicio.textContent = '';
     registro.style.visibility = 'visible';
@@ -25,7 +27,6 @@ const espera = setTimeout(() => {
 }, 5000);
 
 // las funciones para crear cookies, obtenerlas y borrarlas son las proporcionadas en el apartado de COOKIES del tema 9
-
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -56,6 +57,7 @@ function deleteCookie(cname) {
 const correo = document.getElementById('correo');
 const error = document.getElementById('error');
 
+// para saber si el correo es aceptable o no
 correo.addEventListener('blur', () => {
     if(regex.test(correo.value)){
         error.style.visibility = 'hidden';
@@ -70,6 +72,7 @@ correo.addEventListener('blur', () => {
     }
 });    
 
+// para guardar la informacion en la cookie de sesion.
 registro.addEventListener('submit', function(event) {
     event.preventDefault();
     if(getCookie('userInfo') != ''){
