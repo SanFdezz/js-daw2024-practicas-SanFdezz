@@ -146,6 +146,7 @@ function guardarPregunta(){
 // para crear el delay de guardado
 function delay(){
     return new Promise((resolve)=>{
+        atras.disabled = true;
         setTimeout(()=>{
             resolve('Guardando...');
         },5000);
@@ -162,14 +163,79 @@ function guardar(){
         let nuevaCookie = JSON.stringify(cookie);
         setCookie(usuario,nuevaCookie,7)
         resolve('OK!');
+        atras.disabled = false;
     });
 }
 
 
-// esto es lo último a realizar, que sera quien tenga los .then y .catch de la promesa
-grabar.addEventListener('click', () => {
-    delay()
-        .then(() => guardar()) // Llama a la función guardar después del delay
-        .then((mensaje) => console.log(mensaje)) // no falla
-        .catch((error) => console.log(error)); // si hay error
+// esto hace que se carguen las preguntas en la tabla al entrar a la pagina
+document.addEventListener('DOMContentLoaded', () => {
+        mostrar();
 });
+
+function mostrar() {
+    //vacio la tabla adrede para reescribirla
+    tabla.innerHTML = ''; 
+    // creo los campos de la tabla
+    const encabezado = document.createElement('tr');
+    encabezado.innerHTML = `
+        <th>PREGUNTA</th>
+        <th>RESPUESTA</th>
+        <th>PUNTUACION</th>
+        <th>ESTADO</th>`;
+    tabla.appendChild(encabezado); // y lo añado a la tabla
+    // creo una fila por cada pregunta sacada de la cookie
+    cookie.preguntas.forEach(pregunta => {
+        const fila = document.createElement('tr');
+        pregunta.forEach(dato => {
+            const info = document.createElement('td');
+            info.textContent = dato;
+            fila.appendChild(data);
+        });
+        // le añado el estado, en este caso a 'OK!' xq ya esta guardado.
+        const estadoCell = document.createElement('td');
+        estadoCell.textContent = 'OK!';
+        row.appendChild(estadoCell);
+        tabla.appendChild(row); // y lo añado a la fila
+    });
+}
+
+
+// creo el evento de guardar, donde va a estar la promesa:
+grabar.addEventListener('click', () => {
+    // creo la fila nueva donde voy a añadir la pregunta a guardar
+    const nuevaFila = document.createElement('tr');
+
+    // y sus datos:
+    const preguntaTabla = document.createElement('td');
+    preguntaTabla.textContent = pregunta.value;
+    nuevaFila.appendChild(preguntaTabla);
+
+    const respuestaTabla = document.createElement('td');
+    respuestaTabla.textContent = checkVerdadero.checked ? 'verdadero' : 'falso'; // si el verdadero esta activo, se guarda como verdad y si no, como falso.
+    nuevaFila.appendChild(respuestaTabla);
+
+    const puntuacionTabla = document.createElement('td');
+    puntuacionTabla.textContent = puntuacion.value;
+    nuevaFila.appendChild(puntuacionTabla);
+
+    const estadoTabla = document.createElement('td');
+    estadoTabla.textContent = 'Guardando...'; // antes de guardar se pone como guardando...
+    nuevaFila.appendChild(estadoTabla);
+
+    tabla.appendChild(nuevaFila); //añado la fila a la tabla existente
+
+    //por ultimo, ejecutar las promesas
+    delay()
+        .then(() => {
+            return guardar();
+        })
+        .then(() => {
+            estadoTabla.textContent = 'OK!'; //si se ha podido guardar:
+        })
+        .catch(() => {
+            estadoTabla.textContent = 'ERROR!'; //si no:
+        });
+});
+
+
